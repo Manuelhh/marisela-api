@@ -1,7 +1,7 @@
 const Post = require("../models/post");
 
 const posts = async (req, res) => {
-  res.send("Marisela's blog API");
+  res.send("Marisela L Fierro's blog API");
 };
 
 const allPosts = async (req, res) => {
@@ -11,12 +11,63 @@ const allPosts = async (req, res) => {
       res.status(200).json(allPosts);
     })
     .catch((error) => {
-      console.log("Wrong!");
+      console.log("Something went wrong. This is the error:");
       console.log(error);
+      console.log("Something went wrong. This is the end of the error:");
     });
 };
+
+const onePost = async (req, res) => {
+  const { id } = req.params;
+  await Post.findById(id)
+    .then((response) => {
+      const post = response;
+      res.status(200).json(post);
+    })
+    .catch((error) => {
+      console.log("Something went wrong. This is the error:");
+      console.log(error);
+      console.log("Something went wrong. This is the end of the error:");
+    });
+};
+
+// need to finish this
+const createPost = async (req, res) => {
+  const data = req.body;
+  const newPost = new Post(data);
+  await newPost
+    .save()
+    .then((response) => {
+      const post = response;
+      res.status(200).json(post);
+    })
+    .catch((error) => {
+      console.log("Something went wrong. This is the error:");
+      console.log(error);
+      console.log("Something went wrong. This is the end of the error:");
+    });
+};
+
+const deletePost = async (req, res) => {
+  const { id } = req.params;
+  await Post.findByIdAndDelete(id)
+    .then((response) => {
+      const deletedPost = response;
+      res.status(200).json(deletedPost);
+    })
+    .then((error) => {
+      console.log("Something went wrong. This is the error:");
+      console.log(error);
+      console.log("Something went wrong. This is the end of the error:");
+    });
+};
+
+// need to create edit post
 
 module.exports = {
   posts,
   allPosts,
+  onePost,
+  createPost,
+  deletePost,
 };
