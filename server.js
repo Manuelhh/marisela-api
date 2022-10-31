@@ -7,6 +7,7 @@ var methodOverride = require("method-override");
 require("dotenv").config();
 const mongoose = require("mongoose");
 require("./config/database");
+const cors = require("cors");
 
 var indexRouter = require("./routes/index");
 var postsRouter = require("./routes/posts");
@@ -16,6 +17,8 @@ var app = express();
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+
+app.use(cors());
 
 app.use(logger("dev"));
 app.use(express.json());

@@ -11,26 +11,16 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    img: {
-      type: String,
-      required: false,
-    },
-    audio: {
-      type: String,
-      required: false,
-    },
-    video: {
-      type: String,
+    media: {
+      url: String,
+      filename: String,
       required: false,
     },
     text: {
       type: String,
       required: false,
     },
-    gif: {
-      type: String,
-      required: false,
-    },
+
     description: {
       type: String,
       required: true,

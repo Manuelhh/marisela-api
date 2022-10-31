@@ -34,8 +34,15 @@ const onePost = async (req, res) => {
 // need to finish this
 const createPost = async (req, res) => {
   const data = req.body;
-  const newPost = new Post(data);
-  await newPost
+
+  const newPost = await new Post(data);
+  if (req.file) {
+    newPost.media = {
+      url: req.file.path,
+      filename: req.file.filename,
+    };
+  }
+  newPost
     .save()
     .then((response) => {
       const post = response;
