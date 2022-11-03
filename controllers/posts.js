@@ -35,7 +35,13 @@ const onePost = async (req, res) => {
 const createPost = async (req, res) => {
   const data = req.body;
 
-  const newPost = await new Post(data);
+  const newPost = await new Post({
+    user: data.user,
+    title: data.title,
+    text: data.text,
+    description: data.description,
+    likes: data.likes,
+  });
   if (req.file) {
     newPost.media = {
       url: req.file.path,
