@@ -10,5 +10,6 @@ router.get("/allposts", postsController.allPosts);
 router.get("/:id", postsController.onePost);
 router.post("/create", upload.single("media"), postsController.createPost);
 router.delete("/:id", postsController.deletePost);
+router.put("/:id", postsController.handleLike);
 
 module.exports = router;

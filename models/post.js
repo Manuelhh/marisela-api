@@ -16,6 +16,10 @@ const postSchema = new mongoose.Schema(
       filename: String,
       required: false,
     },
+    mimetype: {
+      type: String,
+      required: false,
+    },
     text: {
       type: String,
       required: false,

@@ -1,4 +1,5 @@
 const Post = require("../models/post");
+const cloudinary = require("cloudinary").v2;
 
 const posts = async (req, res) => {
   res.send("Marisela L Fierro's blog API");
@@ -31,7 +32,6 @@ const onePost = async (req, res) => {
     });
 };
 
-// need to finish this
 const createPost = async (req, res) => {
   const data = req.body;
 
@@ -47,7 +47,9 @@ const createPost = async (req, res) => {
       url: req.file.path,
       filename: req.file.filename,
     };
+    newPost.mimetype = req.file.mimetype;
   }
+
   newPost
     .save()
     .then((response) => {
@@ -63,12 +65,34 @@ const createPost = async (req, res) => {
 
 const deletePost = async (req, res) => {
   const { id } = req.params;
+  const postToDelete = await Post.findById(id);
+  await cloudinary.uploader.destroy(postToDelete.media.filename);
   await Post.findByIdAndDelete(id)
     .then((response) => {
       const deletedPost = response;
       res.status(200).json(deletedPost);
     })
     .then((error) => {
+      console.log("Something went wrong. This is the error:");
+      console.log(error);
+      console.log("Something went wrong. This is the end of the error:");
+    });
+};
+
+const handleLike = async (req, res) => {
+  const { id } = req.params;
+  const post = await Post.findById(id);
+  await Post.findOneAndUpdate(
+    { _id: id },
+    {
+      $set: { likes: post.likes + 1 },
+    }
+  )
+    .then((result) => {
+      const post = result;
+      res.status(200).json(post);
+    })
+    .catch((error) => {
       console.log("Something went wrong. This is the error:");
       console.log(error);
       console.log("Something went wrong. This is the end of the error:");
@@ -83,4 +107,5 @@ module.exports = {
   onePost,
   createPost,
   deletePost,
+  handleLike,
 };
