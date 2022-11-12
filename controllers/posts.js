@@ -48,6 +48,7 @@ const createPost = async (req, res) => {
       filename: req.file.filename,
     };
     newPost.mimetype = req.file.mimetype;
+    newPost.fileOriginalName = req.file.originalname;
   }
 
   newPost
@@ -66,10 +67,14 @@ const createPost = async (req, res) => {
 const deletePost = async (req, res) => {
   const { id } = req.params;
   const postToDelete = await Post.findById(id);
-  await cloudinary.uploader.destroy(postToDelete.media.filename);
+  console.log(postToDelete);
   await Post.findByIdAndDelete(id)
     .then((response) => {
       const deletedPost = response;
+      if (deletedPost.media.filename) {
+        cloudinary.uploader.destroy(deletedPost.media.filename);
+      }
+
       res.status(200).json(deletedPost);
     })
     .then((error) => {
@@ -99,7 +104,24 @@ const handleLike = async (req, res) => {
     });
 };
 
-// need to create edit post
+const editPost = async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+  const post = Post.findById(id);
+  await Post.findOneAndUpdate(
+    { _id: id },
+    {
+      $set: { title: data.title, description: data.description },
+    }
+  )
+    .then((result) => {
+      const post = result;
+      res.status(200).json(post);
+    })
+    .catch((error) => {
+      console.log("this is the error", error);
+    });
+};
 
 module.exports = {
   posts,
@@ -108,4 +130,5 @@ module.exports = {
   createPost,
   deletePost,
   handleLike,
+  editPost,
 };

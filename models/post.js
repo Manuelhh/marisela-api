@@ -20,6 +20,10 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    fileOriginalName: {
+      type: String,
+      required: false,
+    },
     text: {
       type: String,
       required: false,
