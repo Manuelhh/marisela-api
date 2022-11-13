@@ -122,7 +122,7 @@ const editPost = async (req, res) => {
       console.log("this is the error", error);
     });
 };
-
+``;
 module.exports = {
   posts,
   allPosts,
