@@ -21,7 +21,17 @@ const createUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { username, password } = req.body;
-  // here
+  const user = await User.findOne({ username });
+  if (!user) {
+    res.status(500).json("username || password incorrect");
+  } else {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      res.status(500).json("username || password incorrect");
+    } else {
+      res.status(200).json(user);
+    }
+  }
 };
 
 module.exports = {
