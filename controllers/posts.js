@@ -34,7 +34,6 @@ const onePost = async (req, res) => {
 
 const createPost = async (req, res) => {
   const data = req.body;
-
   const newPost = await new Post({
     user: data.user,
     title: data.title,
@@ -50,7 +49,6 @@ const createPost = async (req, res) => {
     newPost.mimetype = req.file.mimetype;
     newPost.fileOriginalName = req.file.originalname;
   }
-
   newPost
     .save()
     .then((response) => {
